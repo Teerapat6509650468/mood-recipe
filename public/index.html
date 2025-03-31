@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mood Recipes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <h1 class="text-4xl font-bold text-center mb-8 text-gray-800">Mood Recipes</h1>
+        
+        <div class="max-w-md mx-auto bg-white rounded-lg shadow-lg p-6">
+            <h2 class="text-xl font-semibold mb-4 text-gray-700">How are you feeling today?</h2>
+            <div class="grid grid-cols-2 gap-4 mb-6">
+                <button class="mood-btn bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded" data-mood="sad">Sad</button>
+                <button class="mood-btn bg-yellow-500 hover:bg-yellow-600 text-white py-2 px-4 rounded" data-mood="tired">Tired</button>
+                <button class="mood-btn bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded" data-mood="cold">Cold</button>
+                <button class="mood-btn bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded" data-mood="happy">Happy</button>
+            </div>
+
+            <div id="recipe-container" class="hidden">
+                <h3 id="recipe-name" class="text-2xl font-bold mb-4 text-gray-800"></h3>
+                <div class="mb-4">
+                    <h4 class="font-semibold text-gray-700">Ingredients:</h4>
+                    <p id="recipe-ingredients" class="text-gray-600"></p>
+                </div>
+                <div class="mb-4">
+                    <h4 class="font-semibold text-gray-700">Instructions:</h4>
+                    <p id="recipe-instructions" class="text-gray-600 whitespace-pre-line"></p>
+                </div>
+                <button id="new-recipe" class="bg-purple-500 hover:bg-purple-600 text-white py-2 px-4 rounded w-full">
+                    Get Another Recipe
+                </button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html> 
