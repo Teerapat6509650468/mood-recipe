@@ -47,6 +47,18 @@ const db = new sqlite3.Database('recipes.db', (err) => {
                         ingredients: "Coconut milk, curry paste, vegetables, tofu, rice",
                         instructions: "1. Cook curry paste\n2. Add coconut milk\n3. Add vegetables and tofu",
                         mood: "cold"
+                    },
+                    {
+                        name: "Colorful Buddha Bowl",
+                        ingredients: "Quinoa, avocado, cherry tomatoes, chickpeas, cucumber, tahini dressing",
+                        instructions: "1. Cook quinoa\n2. Chop vegetables\n3. Arrange in bowl\n4. Drizzle with tahini dressing",
+                        mood: "happy"
+                    },
+                    {
+                        name: "Fresh Fruit Parfait",
+                        ingredients: "Greek yogurt, mixed berries, granola, honey",
+                        instructions: "1. Layer yogurt\n2. Add berries\n3. Top with granola and honey",
+                        mood: "happy"
                     }
                 ];
 
