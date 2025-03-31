@@ -2,6 +2,7 @@ const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const cors = require('cors');
 const path = require('path');
+const fs = require('fs');
 
 const app = express();
 const port = 3000;
@@ -12,7 +13,14 @@ app.use(express.json());
 app.use(express.static('public'));
 
 // Database setup
-const db = new sqlite3.Database('recipes.db', (err) => {
+const dbPath = 'recipes.db';
+
+// Delete existing database file if it exists
+if (fs.existsSync(dbPath)) {
+    fs.unlinkSync(dbPath);
+}
+
+const db = new sqlite3.Database(dbPath, (err) => {
     if (err) {
         console.error('Error opening database:', err);
     } else {
@@ -24,11 +32,11 @@ const db = new sqlite3.Database('recipes.db', (err) => {
             ingredients TEXT NOT NULL,
             instructions TEXT NOT NULL,
             mood TEXT NOT NULL
-        )`);
-
-        // Insert some sample data if the table is empty
-        db.get("SELECT COUNT(*) as count FROM recipes", [], (err, row) => {
-            if (row.count === 0) {
+        )`, (err) => {
+            if (err) {
+                console.error('Error creating table:', err);
+            } else {
+                // Insert sample data
                 const sampleRecipes = [
                     {
                         name: "Comforting Mac and Cheese",
@@ -64,7 +72,11 @@ const db = new sqlite3.Database('recipes.db', (err) => {
 
                 const stmt = db.prepare("INSERT INTO recipes (name, ingredients, instructions, mood) VALUES (?, ?, ?, ?)");
                 sampleRecipes.forEach(recipe => {
-                    stmt.run(recipe.name, recipe.ingredients, recipe.instructions, recipe.mood);
+                    stmt.run(recipe.name, recipe.ingredients, recipe.instructions, recipe.mood, (err) => {
+                        if (err) {
+                            console.error('Error inserting recipe:', err);
+                        }
+                    });
                 });
                 stmt.finalize();
             }
@@ -77,7 +89,12 @@ app.get('/api/recipe/:mood', (req, res) => {
     const mood = req.params.mood;
     db.all("SELECT * FROM recipes WHERE mood = ? ORDER BY RANDOM() LIMIT 1", [mood], (err, rows) => {
         if (err) {
+            console.error('Database error:', err);
             res.status(500).json({ error: err.message });
+            return;
+        }
+        if (!rows || rows.length === 0) {
+            res.status(404).json({ error: 'No recipe found for this mood' });
             return;
         }
         res.json(rows[0]);
