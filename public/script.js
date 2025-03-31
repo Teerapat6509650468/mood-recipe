@@ -13,24 +13,46 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     newRecipeButton.addEventListener('click', () => {
-        getRecipe(currentMood);
+        if (currentMood) {
+            getRecipe(currentMood);
+        } else {
+            alert('Please select a mood first!');
+        }
     });
 });
 
 async function getRecipe(mood) {
+    const recipeContainer = document.getElementById('recipe-container');
+    const newRecipeButton = document.getElementById('new-recipe');
+    
     try {
+        // Show loading state
+        newRecipeButton.disabled = true;
+        newRecipeButton.textContent = 'Loading...';
+        
         const response = await fetch(`/api/recipe/${mood}`);
         const recipe = await response.json();
         
         if (recipe) {
             displayRecipe(recipe);
-            document.getElementById('recipe-container').classList.remove('hidden');
+            recipeContainer.classList.remove('hidden');
+            
+            // Add a fade-in animation
+            recipeContainer.style.opacity = '0';
+            setTimeout(() => {
+                recipeContainer.style.transition = 'opacity 0.5s ease-in';
+                recipeContainer.style.opacity = '1';
+            }, 50);
         } else {
             alert('No recipe found for this mood. Try another mood!');
         }
     } catch (error) {
         console.error('Error fetching recipe:', error);
         alert('Error fetching recipe. Please try again.');
+    } finally {
+        // Reset button state
+        newRecipeButton.disabled = false;
+        newRecipeButton.textContent = 'Get Another Recipe';
     }
 }
 
